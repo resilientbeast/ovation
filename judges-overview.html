@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OVATION — Judges Overview | Band of Agents Hackathon</title>
+<meta name="description" content="Judging reference for OVATION: role specialization, shared context, task state, and visible coordination — mapped directly to evidence, plus a live demo guide and verification checklist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --oxblood:        #3D0E13;
+    --oxblood-deep:    #240609;
+    --velvet:          #6E1F2A;
+    --gold:            #D7A33D;
+    --gold-bright:     #E8BD5E;
+    --gold-dim:        #8B6A2E;
+    --ivory:           #F6EEE3;
+    --ivory-soft:      #EFE3D2;
+    --ivory-muted:     #D8C9B5;
+    --ink:             #20151A;
+    --ink-soft:        #4A3A3F;
+    --publish:         #3F7D5C;
+    --escalate:        #B23A33;
+    --loop:            #7A4FA0;
+    --media:           #A6692B;
+    --todo-bg:         #FBF1DD;
+    --todo-border:     #D7A33D;
+    --display: 'Big Shoulders Display', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--body);
+    background:var(--ivory);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 28px; }
+  @media (max-width:640px){ .wrap{ padding:0 18px; } }
+
+  /* ───────── Sticky nav ───────── */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:var(--oxblood-deep);
+    border-bottom:1px solid rgba(215,163,61,0.25);
+  }
+  .topnav-inner{
+    max-width:920px; margin:0 auto; padding:0 28px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:54px; gap:18px;
+  }
+  @media (max-width:640px){ .topnav-inner{ padding:0 18px; } }
+  .topnav-brand{
+    font-family:var(--display); font-weight:800; font-size:18px;
+    color:var(--gold-bright); letter-spacing:0.04em; white-space:nowrap;
+  }
+  .topnav-brand span{ color:var(--ivory-muted); font-family:var(--mono); font-weight:500; font-size:10.5px; letter-spacing:0.1em; margin-left:10px; }
+  .topnav-links{
+    display:flex; gap:18px; overflow-x:auto; scrollbar-width:none;
+    font-family:var(--mono); font-size:11px; letter-spacing:0.04em;
+  }
+  .topnav-links::-webkit-scrollbar{ display:none; }
+  .topnav-links a{ color:var(--ivory-muted); white-space:nowrap; transition:color 0.15s ease; text-decoration:none; }
+  .topnav-links a:hover{ color:var(--gold-bright); }
+  .topnav-cta{
+    font-family:var(--body); font-weight:600; font-size:12.5px;
+    background:var(--gold); color:var(--oxblood-deep);
+    padding:7px 14px; border-radius:3px; white-space:nowrap;
+    text-decoration:none;
+  }
+  @media (max-width:760px){ .topnav-cta{ display:none; } }
+
+  /* ───────── Header band ───────── */
+  .pagehead{
+    background:linear-gradient(180deg, var(--oxblood) 0%, var(--oxblood-deep) 100%);
+    color:var(--ivory);
+    padding:56px 0 48px;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; font-weight:500;
+    letter-spacing:0.18em; text-transform:uppercase; color:var(--gold);
+  }
+  .pagehead h1{
+    font-family:var(--display); font-weight:900;
+    font-size:clamp(36px, 6vw, 56px);
+    line-height:1.02; margin-top:10px; letter-spacing:0.01em;
+  }
+  .pagehead p{
+    margin-top:14px; font-size:15.5px; color:var(--ivory-muted); max-width:600px;
+  }
+
+  /* ───────── Section shells ───────── */
+  section{ padding:60px 0; scroll-margin-top:64px; }
+  .section-light{ background:var(--ivory); }
+  .section-dark{ background:var(--oxblood); color:var(--ivory); }
+  .section-tag{ font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; }
+  .section-light .section-tag{ color:var(--velvet); }
+  .section-dark .section-tag{ color:var(--gold); }
+  h2{
+    font-family:var(--display); font-weight:800;
+    font-size:clamp(26px, 3.6vw, 36px);
+    margin-top:8px; margin-bottom:8px; letter-spacing:0.01em;
+  }
+  .section-light h2{ color:var(--oxblood); }
+  .section-dark h2{ color:var(--ivory); }
+  .section-intro{ font-size:14.5px; max-width:640px; margin-bottom:32px; }
+  .section-light .section-intro{ color:var(--ink-soft); }
+  .section-dark .section-intro{ color:var(--ivory-muted); }
+
+  /* ───────── At a Glance ───────── */
+  .glance-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:#E6D9C7; border:1px solid #E6D9C7;
+  }
+  @media (max-width:680px){ .glance-grid{ grid-template-columns:repeat(2,1fr); } }
+  .glance-cell{ background:#fff; padding:18px 20px; }
+  .glance-label{ font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold-dim); }
+  .glance-value{ font-weight:700; font-size:15px; color:var(--oxblood); margin-top:5px; }
+
+  /* ───────── Criteria mapping ───────── */
+  .criteria-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:680px){ .criteria-grid{ grid-template-columns:1fr; } }
+  .criteria-card{
+    background:var(--oxblood-deep);
+    border:1px solid rgba(215,163,61,0.2);
+    border-radius:8px;
+    padding:24px 24px 22px;
+  }
+  .criteria-num{ font-family:var(--mono); font-size:11px; color:var(--gold-dim); letter-spacing:0.06em; }
+  .criteria-title{ font-family:var(--display); font-weight:800; font-size:21px; color:var(--gold-bright); margin-top:6px; }
+  .criteria-claim{ font-size:13.5px; color:var(--ivory); margin-top:10px; font-weight:500; }
+  .criteria-evidence{ margin-top:12px; padding-left:0; list-style:none; }
+  .criteria-evidence li{
+    font-size:12.5px; color:var(--ivory-muted); margin-top:7px; padding-left:16px; position:relative;
+  }
+  .criteria-evidence li::before{
+    content:"→"; position:absolute; left:0; color:var(--gold-dim);
+  }
+
+  /* ───────── Architecture table ───────── */
+  .arch-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  .arch-table th{
+    font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--gold-dim); text-align:left; padding:0 14px 10px; border-bottom:1.5px solid var(--oxblood);
+  }
+  .arch-table td{ padding:13px 14px; border-bottom:1px solid #E6D9C7; vertical-align:top; }
+  .arch-table tr:last-child td{ border-bottom:none; }
+  .arch-num{ font-family:var(--mono); color:var(--gold-dim); font-size:12px; }
+  .arch-name{ font-weight:700; color:var(--oxblood); }
+  .arch-llm{
+    font-family:var(--mono); font-size:10.5px; font-weight:500;
+    color:var(--velvet); background:#F2E5D3; padding:3px 9px; border-radius:20px; display:inline-block;
+  }
+  .arch-llm.none{ color:var(--ink-soft); background:#EFE3D2; }
+
+  /* ───────── Showpiece (compact) ───────── */
+  .loop-compact{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:var(--oxblood-deep); border-radius:8px; padding:20px 22px; margin-top:8px;
+  }
+  .loop-step{ font-family:var(--mono); font-weight:600; font-size:12.5px; padding:8px 14px; border-radius:5px; color:#fff; }
+  .loop-arrow{ color:var(--gold-dim); font-size:16px; }
+  .loop-note{ font-size:12.5px; color:var(--ivory-muted); margin-top:14px; }
+
+  /* ───────── Demo guide ───────── */
+  .demo-list{ display:flex; flex-direction:column; gap:0; }
+  .demo-step{
+    display:flex; gap:18px; padding:18px 0; border-bottom:1px solid #E6D9C7;
+  }
+  .demo-step:last-child{ border-bottom:none; }
+  .demo-order{
+    font-family:var(--display); font-weight:900; font-size:30px; color:var(--gold-dim);
+    flex-shrink:0; width:52px;
+  }
+  .demo-body h3{ font-family:var(--body); font-weight:700; font-size:15.5px; color:var(--oxblood); }
+  .demo-body .seedtag{ font-family:var(--mono); font-size:10.5px; color:var(--velvet); margin-left:8px; }
+  .demo-body p{ font-size:13.5px; color:var(--ink-soft); margin-top:5px; }
+
+  /* ───────── Run block ───────── */
+  .run-block{ background:var(--ink); border-radius:8px; padding:24px 26px; }
+  .run-block pre{ font-family:var(--mono); font-size:13px; color:var(--ivory-soft); line-height:1.8; overflow-x:auto; }
+  .run-block .comment{ color:var(--ivory-muted); }
+
+  /* ───────── Verification checklist ───────── */
+  .checklist{ display:flex; flex-direction:column; gap:10px; }
+  .check-item{
+    display:flex; align-items:flex-start; gap:12px;
+    background:#fff; border:1px solid #E6D9C7; border-radius:6px; padding:14px 16px;
+  }
+  .check-box{
+    width:18px; height:18px; border:2px solid var(--gold-dim); border-radius:3px; flex-shrink:0; margin-top:1px;
+  }
+  .check-text{ font-size:13.5px; color:var(--ink); }
+  .check-text strong{ color:var(--oxblood); }
+
+  .todo-banner{
+    background:var(--todo-bg); border:1.5px dashed var(--todo-border);
+    border-radius:8px; padding:16px 20px; margin-bottom:22px;
+    font-size:13px; color:var(--ink-soft);
+  }
+  .todo-banner strong{ color:var(--oxblood); font-family:var(--mono); font-size:11px; letter-spacing:0.05em; text-transform:uppercase; display:block; margin-bottom:5px; }
+
+  /* ───────── Stack list (compact) ───────── */
+  .stack-compact{ display:flex; flex-direction:column; gap:1px; background:#E6D9C7; border:1px solid #E6D9C7; }
+  .stack-compact-row{ background:#fff; display:flex; align-items:center; gap:16px; padding:16px 18px; }
+  .stack-dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .stack-compact-name{ font-weight:700; font-size:14.5px; color:var(--oxblood); min-width:200px; }
+  .stack-compact-desc{ font-size:13px; color:var(--ink-soft); }
+  @media (max-width:680px){ .stack-compact-row{ flex-wrap:wrap; } .stack-compact-name{ min-width:0; width:100%; } }
+
+  /* ───────── Footer ───────── */
+  footer{ background:var(--oxblood-deep); color:var(--ivory-muted); padding:48px 0 36px; text-align:center; }
+  .footer-mark{ font-family:var(--display); font-weight:900; font-size:24px; color:var(--gold); letter-spacing:0.05em; }
+  .footer-links{ display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin:20px 0; font-size:13px; }
+  .footer-links a{ color:var(--ivory-muted); text-decoration:none; }
+  .footer-links a:hover{ color:var(--gold-bright); }
+  .footer-credit{ font-size:12px; opacity:0.7; margin-top:14px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="topnav-brand">OVATION <span>JUDGES OVERVIEW</span></div>
+    <div class="topnav-links">
+      <a href="#glance">Glance</a>
+      <a href="#criteria">Criteria</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#showpiece">QA Loop</a>
+      <a href="#demo">Demo Guide</a>
+      <a href="#run">Run</a>
+      <a href="#verify">Verify</a>
+      <a href="#stack">Stack</a>
+    </div>
+    <a class="topnav-cta" href="https://github.com/resilientbeast/review-response-system" target="_blank" rel="noopener">GitHub →</a>
+  </div>
+</nav>
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="eyebrow">Band of Agents Hackathon · Judging Reference</p>
+    <h1>OVATION — what to look for, in one page.</h1>
+    <p>Role specialization, shared context, task state, and visible coordination — each mapped directly to where it shows up in the build. Everything below is real, checkable, and built to be watched live.</p>
+  </div>
+</header>
+
+<!-- ═══════════════ AT A GLANCE ═══════════════ -->
+<section class="section-light" id="glance">
+  <div class="wrap">
+    <p class="section-tag">At a glance</p>
+    <h2>The essentials.</h2>
+    <div class="glance-grid">
+      <div class="glance-cell"><div class="glance-label">Project</div><div class="glance-value">OVATION</div></div>
+      <div class="glance-cell"><div class="glance-label">Pipeline</div><div class="glance-value">6 specialized agents</div></div>
+      <div class="glance-cell"><div class="glance-label">Coordination</div><div class="glance-value">Band (shared room)</div></div>
+      <div class="glance-cell"><div class="glance-label">LLM providers</div><div class="glance-value">Featherless + AI/ML API</div></div>
+      <div class="glance-cell"><div class="glance-label">Generation model</div><div class="glance-value">DeepSeek-V4</div></div>
+      <div class="glance-cell"><div class="glance-label">Demo control</div><div class="glance-value">HTTP inject endpoint</div></div>
+      <div class="glance-cell"><div class="glance-label">Seed scenarios</div><div class="glance-value">8 engineered cases</div></div>
+      <div class="glance-cell"><div class="glance-label">Build tool</div><div class="glance-value">Antigravity</div></div>
+      <div class="glance-cell"><div class="glance-label">Repo</div><div class="glance-value"><a href="https://github.com/resilientbeast/review-response-system" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">resilientbeast/review-response-system</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ JUDGING CRITERIA ═══════════════ -->
+<section class="section-dark" id="criteria">
+  <div class="wrap">
+    <p class="section-tag">Judging criteria mapping</p>
+    <h2>Four criteria. Direct evidence for each.</h2>
+    <p class="section-intro">No abstractions — each claim below points to something a judge can actually watch happen in the Band room or read in the repo.</p>
+
+    <div class="criteria-grid">
+      <div class="criteria-card">
+        <div class="criteria-num">01</div>
+        <div class="criteria-title">Role Specialization</div>
+        <p class="criteria-claim">Six agents, six distinct jobs. No agent does another's work.</p>
+        <ul class="criteria-evidence">
+          <li>Monitor only surfaces reviews — it never classifies or drafts</li>
+          <li>Drafter only generates — it never scores its own work</li>
+          <li>QA only evaluates — it never writes the published text</li>
+          <li>Each agent is a separate registered Band identity</li>
+        </ul>
+      </div>
+
+      <div class="criteria-card">
+        <div class="criteria-num">02</div>
+        <div class="criteria-title">Shared Context</div>
+        <p class="criteria-claim">A defined schema chain — every agent gets exactly the structured context it needs.</p>
+        <ul class="criteria-evidence">
+          <li>ReviewEvent → TriageContext → ResearchPack</li>
+          <li>ResearchPack → DraftPackage → QAResult</li>
+          <li>QAResult branches to RevisionNotes or EscalationAlert</li>
+          <li>No agent re-derives what an upstream agent already decided</li>
+        </ul>
+      </div>
+
+      <div class="criteria-card">
+        <div class="criteria-num">03</div>
+        <div class="criteria-title">Task State</div>
+        <p class="criteria-claim">Every review has a tracked lifecycle, not a single stateless pass.</p>
+        <ul class="criteria-evidence">
+          <li>States: drafted → in QA → revised → approved / escalated</li>
+          <li>The QA loop explicitly models a revision cycle, capped at 2 iterations</li>
+          <li>A failed second pass changes the task's path — to Escalation</li>
+        </ul>
+      </div>
+
+      <div class="criteria-card">
+        <div class="criteria-num">04</div>
+        <div class="criteria-title">Visible Coordination</div>
+        <p class="criteria-claim">All six agents in one Band room. Every handoff is a readable message.</p>
+        <ul class="criteria-evidence">
+          <li>No hidden API calls between agents — only Band messages</li>
+          <li>Mentions route each message to the agent that should act next</li>
+          <li>A judge can read the full decision trail without touching code</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ARCHITECTURE ═══════════════ -->
+<section class="section-light" id="architecture">
+  <div class="wrap">
+    <p class="section-tag">Architecture</p>
+    <h2>The six-agent pipeline.</h2>
+    <p class="section-intro">Reviews move left to right. Most exit through QA → Publish; flagged cases exit early through Escalation.</p>
+
+    <table class="arch-table">
+      <thead>
+        <tr><th>#</th><th>Agent</th><th>Job</th><th>Model</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="arch-num">01</td><td class="arch-name">Monitor</td><td>Polls for new reviews, surfaces them into Band</td><td><span class="arch-llm none">No LLM</span></td></tr>
+        <tr><td class="arch-num">02</td><td class="arch-name">Triage</td><td>Classifies sentiment & urgency, routes the case</td><td><span class="arch-llm">Featherless</span></td></tr>
+        <tr><td class="arch-num">03</td><td class="arch-name">Research</td><td>Enriches with brand voice and business context</td><td><span class="arch-llm">Featherless</span></td></tr>
+        <tr><td class="arch-num">04</td><td class="arch-name">Drafter</td><td>Generates the response; revises on QA rejection</td><td><span class="arch-llm">DeepSeek-V4</span></td></tr>
+        <tr><td class="arch-num">05</td><td class="arch-name">QA</td><td>Scores drafts; approves or loops back (max 2x)</td><td><span class="arch-llm">DeepSeek-V4</span></td></tr>
+        <tr><td class="arch-num">06</td><td class="arch-name">Escalation</td><td>Holds critical or flagged cases for human review — terminal stage, no auto-publish</td><td><span class="arch-llm">Featherless</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ SHOWPIECE ═══════════════ -->
+<section class="section-dark" id="showpiece">
+  <div class="wrap">
+    <p class="section-tag">The coordination showpiece</p>
+    <h2>The QA revision loop.</h2>
+    <p class="section-intro">This is the single best moment to watch live — it's the clearest proof that coordination, not just generation, is happening.</p>
+
+    <div class="loop-compact">
+      <span class="loop-step" style="background:#1D4ED8;">DRAFTER</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step" style="background:#7A4FA0;">QA</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step" style="background:var(--escalate);">REJECT (v1)</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step" style="background:#1D4ED8;">DRAFTER REVISES</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step" style="background:#7A4FA0;">QA</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step" style="background:var(--publish);">APPROVE (v2)</span>
+    </div>
+    <p class="loop-note">Seed #04 is engineered to fail QA on the first pass — a verbose draft trips an explicit rejection rule — guaranteeing this loop is visible every time it's demoed, not left to chance. Capped at 2 iterations; a second rejection routes to Escalation instead of looping indefinitely.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ LIVE DEMO GUIDE ═══════════════ -->
+<section class="section-light" id="demo">
+  <div class="wrap">
+    <p class="section-tag">Live demo guide</p>
+    <h2>Recommended sequence: four seeds, four proofs.</h2>
+    <p class="section-intro">Each step is triggered with <code>POST /inject?id=seed_XX</code> for a reliable, repeatable run — no dependency on live review platforms.</p>
+
+    <div class="demo-list">
+      <div class="demo-step">
+        <div class="demo-order">01</div>
+        <div class="demo-body">
+          <h3>Happy Path <span class="seedtag">seed_01</span></h3>
+          <p>Establishes the baseline — full pipeline, single pass, clean publish. Proves the mechanics work end-to-end before anything interesting happens.</p>
+        </div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-order">02</div>
+        <div class="demo-body">
+          <h3>Routine Complaint <span class="seedtag">seed_02</span></h3>
+          <p>Shows Research's enrichment actually shaping the response tone — not a templated reply, a context-aware one.</p>
+        </div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-order">03</div>
+        <div class="demo-body">
+          <h3>QA Revision Loop ★ <span class="seedtag">seed_04</span></h3>
+          <p>The centerpiece. QA rejects the first draft, Drafter revises, QA approves the second. The clearest live proof of agent coordination in the whole demo.</p>
+        </div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-order">04</div>
+        <div class="demo-body">
+          <h3>Legal Threat <span class="seedtag">seed_05</span></h3>
+          <p>Shows the safety path — drafting is skipped entirely, Escalation fires immediately, and the case is held for a human. Nothing auto-publishes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW TO RUN ═══════════════ -->
+<section class="section-dark" id="run">
+  <div class="wrap">
+    <p class="section-tag">How to run</p>
+    <h2>From clone to live demo.</h2>
+    <div class="run-block">
+      <pre><span class="comment"># 1. clone &amp; install python deps</span>
+git clone git@github.com:resilientbeast/review-response-system.git
+cd review-response-system
+uv sync
+
+<span class="comment"># 2. frontend deps</span>
+cd dashboard/frontend &amp;&amp; npm install &amp;&amp; cd ../..
+
+<span class="comment"># 3. configure</span>
+cp .env.example .env
+cp agent_config.yaml.example agent_config.yaml
+<span class="comment"># add BAND_API_KEY, OPENAI_API_KEY, etc.</span>
+
+<span class="comment"># 4. init local database</span>
+sqlite3 data/reviews.db &lt; migrations/001_initial.sql
+
+<span class="comment"># run — three processes, separate terminals</span>
+uv run python run_all.py                          <span class="comment"># agent pipeline</span>
+uv run uvicorn dashboard.bridge:app --port 8001    <span class="comment"># SSE bridge</span>
+cd dashboard/frontend &amp;&amp; npm run dev               <span class="comment"># dashboard UI</span>
+
+<span class="comment"># trigger seed_04 — the QA revision loop showpiece</span>
+curl -X POST http://localhost:8002/inject \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform": "tripadvisor",
+    "business_id": "loc_demo",
+    "review": {
+      "text": "Worst experience of my life. The manager was completely dismissive when I raised my concerns. The food was inedible and no one seemed to care. I will be leaving reviews everywhere I can.",
+      "rating": 1,
+      "author": "Sarah K.",
+      "url": "http://demo.platform",
+      "language": "en"
+    }
+  }'
+
+<span class="comment"># other seeds (01, 02, 05): same structure, swap the "review" object</span>
+<span class="comment"># fallback if the local inject server isn't running: POST the same body to</span>
+<span class="comment">#   http://localhost:8000/demo/inject</span>
+
+<span class="comment"># optional: external webhook ingestion (see README)</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ VERIFICATION ═══════════════ -->
+<section class="section-light" id="verify">
+  <div class="wrap">
+    <p class="section-tag">Verification</p>
+    <h2>Pre-submission checklist.</h2>
+
+    <div class="todo-banner">
+      <strong>Confirm before submitting</strong>
+      Each item below should be true and verified on your final build before this page goes live — judges check these.
+    </div>
+
+    <div class="checklist">
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>Seed scenarios verified:</strong> 8 / 8 producing expected outcomes</div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>Band integration:</strong> all 6 agents registered and responding in the shared room</div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>Featherless integration:</strong> Triage, Research, Escalation calling successfully</div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>AI/ML API integration:</strong> Drafter and QA calling DeepSeek-V4 successfully</div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>HTTP inject endpoint:</strong> all 8 seed IDs trigger correctly</div></div>
+      <div class="check-item"><div class="check-box"></div><div class="check-text"><strong>QA loop fires on demand:</strong> seed_04 reliably rejects on v1 and approves on v2</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STACK ═══════════════ -->
+<section class="section-light" id="stack" style="padding-top:0;">
+  <div class="wrap">
+    <p class="section-tag">Tech stack</p>
+    <h2>What it's built on.</h2>
+    <div class="stack-compact">
+      <div class="stack-compact-row">
+        <span class="stack-dot" style="background:#0D9488;"></span>
+        <span class="stack-compact-name">Band</span>
+        <span class="stack-compact-desc">Coordination layer — shared room, agent handles, visible message routing</span>
+      </div>
+      <div class="stack-compact-row">
+        <span class="stack-dot" style="background:#1D4ED8;"></span>
+        <span class="stack-compact-name">Featherless</span>
+        <span class="stack-compact-desc">LLM provider for Triage, Research, and Escalation — cost-efficient inference</span>
+      </div>
+      <div class="stack-compact-row">
+        <span class="stack-dot" style="background:#7A4FA0;"></span>
+        <span class="stack-compact-name">AI/ML API · DeepSeek-V4</span>
+        <span class="stack-compact-desc">LLM provider for Drafter and QA — premium reasoning for generation and scoring</span>
+      </div>
+      <div class="stack-compact-row">
+        <span class="stack-dot" style="background:var(--media);"></span>
+        <span class="stack-compact-name">HTTP Trigger</span>
+        <span class="stack-compact-desc">Controlled inject endpoint for reliable, repeatable live demo scenarios</span>
+      </div>
+      <div class="stack-compact-row">
+        <span class="stack-dot" style="background:var(--gold-dim);"></span>
+        <span class="stack-compact-name">Antigravity</span>
+        <span class="stack-compact-desc">AI code builder used to implement the spec against the verified Band SDK</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-mark">OVATION</div>
+    <div class="footer-links">
+      <a href="index.html">Landing Page</a>
+      <a href="https://github.com/resilientbeast/review-response-system" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://youtu.be/_PF6gVH9OeM" target="_blank" rel="noopener">Demo Video</a>
+      <a href="https://docs.google.com/presentation/d/122bFnxnwlfoZeA_x_k_NyK6NQ2pBjoiA/view" target="_blank" rel="noopener">Slide Deck</a>
+    </div>
+    <p class="footer-credit">Built for the Band of Agents Hackathon · June 2026</p>
+  </div>
+</footer>
+
+</body>
+</html>
